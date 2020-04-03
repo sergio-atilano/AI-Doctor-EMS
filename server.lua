@@ -1,7 +1,7 @@
 Config = {}
-Config.Ucret = 2000
+Config.ReviveReward = 100
+Config.CopsOnline = 1
 
-local CopsConnected  = 0
 ESX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
@@ -25,31 +25,37 @@ end
 CountCops()
 
 
-ESX.RegisterServerCallback('ai_mechanic:doktor', function(source, cb)
-	local xPlayer = ESX.GetPlayerFromId(source)
+RegisterServerEvent('AI-Doctor:revive')
+AddEventHandler('AI-Doctor:revive', function(source)
+    local _source = source
+    local xPlayer = ESX.GetPlayerFromId(_source)
+    local playerMoney = 0
+    local societyAccount
+    playerMoney = xPlayer.getAccount('bank').money
 
-	cb(CopsConnected)
+    TriggerEvent('esx_addonaccount:getSharedAccount', 'society_ambulance',function(account)
+        societyAccount = account
+    end)
+
+    if societyAccount  then
+        local societyMoney
+        if CopsConnected < Config.CopsOnline then
+            if playerMoney >= Config.ReviveReward then
+                xPlayer.removeAccountMoney('bank', Config.ReviveReward)
+                societyAccount.addMoney(Config.ReviveReward)
+                TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'Pagaste 100€ pela assistência médica.' })
+                TriggerClientEvent('doctor:revive', source)
+            else
+                TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'error', text = 'Lamentamos mas como não tens dinheiro para pagar, não vamos ao local' })
+            end
+        else
+            TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'error', text = 'Não podemos ir ao local, porque há médicos de serviço!'})
+        end
+    end
+
 end)
 
-RegisterServerEvent('ai_mechanic:odeme')
-AddEventHandler('ai_mechanic:odeme', function(source)
-	local _source = source
-	local xPlayer = ESX.GetPlayerFromId(_source)
-	
-	if xPlayer.getBank() >= Config.Ucret then
 
-	xPlayer.removeBank(Config.Ucret)
-	TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'success', text = 'Muayene için $2000 ödeme yaptın.' })
-	TriggerClientEvent('knb:mech', source)
-	
-	else
-	
-	TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'error', text = 'Bankanda yeteri kadar para yok.' })
-	
-	end
-end)
-
-
-TriggerEvent('es:addCommand', 'doktor', function(source)
-    TriggerEvent('ai_mechanic:odeme', source)
+TriggerEvent('es:addCommand', 'medico', function(source)
+    TriggerEvent('AI-Doctor:revive', source)
     end)

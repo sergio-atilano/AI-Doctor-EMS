@@ -1,9 +1,9 @@
-ESX = nil
 
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-RegisterNetEvent("knb:mech")
-AddEventHandler("knb:mech", function()
+
+
+RegisterNetEvent("doctor:revive")
+AddEventHandler("doctor:revive", function()
     player = GetPlayerPed(-1)
     playerPos = GetEntityCoords(player)
 
@@ -34,14 +34,7 @@ AddEventHandler("knb:mech", function()
 			SpawnVehicle(playerPos.x, playerPos.y, playerPos.x, vehhash, driverhash)
 		end
 		playRadioAnim(player)
-		ESX.TriggerServerCallback('ai_mechanic:doktor', function(CopsConnected)
-		if CopsConnected >= Config.doktor then
-		exports['mythic_notify']:DoHudText('error', 'Yeteri kadar doktor olduğu için kullanılamıyor.')
-		else
-		ClearPedTasksImmediately(player)
 		GoToTarget(GetEntityCoords(targetVeh).x, GetEntityCoords(targetVeh).y, GetEntityCoords(targetVeh).z, mechVeh, mechPed, vehhash, targetVeh)
-    end
-	end)
 	end
 end)
 
@@ -72,7 +65,7 @@ end
 
 function GoToTarget(x, y, z, vehicle, driver, vehhash, player)
     TaskVehicleDriveToCoord(driver, vehicle, x, y, z, 17.0, 0, vehhash, drivingStyle, 1, true)
-    ShowAdvancedNotification(companyIcon, companyName, "Doktor Bilgilendirildi", "Bölgenize bir ekip gönderildi. ~y~" .. companyName)
+    ShowAdvancedNotification(companyIcon, companyName, "O médico foi chamado", "Foi enviado um médico para a tua localização. ~y~" .. companyName)
     enroute = true
     while enroute do
         Citizen.Wait(500)
@@ -126,7 +119,7 @@ function RepairVehicle(player, vehicle, driver)
     norunrange = false
 	FreezeEntityPosition(driver, false)
     Citizen.Wait(500)
-	ShowAdvancedNotification(mechPedPick.icon, mechPedPick.name, "Merkez Hastane" , mechPedPick.lines[math.random(#mechPedPick.lines)])
+	ShowAdvancedNotification(mechPedPick.icon, mechPedPick.name, "INEM Alternativ" , mechPedPick.lines[math.random(#mechPedPick.lines)])
 	TriggerEvent('esx_ambulancejob:revive', formattedCoords)
 	Citizen.Wait(5000)
 	LeaveTarget(vehicle, driver)

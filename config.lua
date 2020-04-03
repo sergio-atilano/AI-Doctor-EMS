@@ -1,13 +1,12 @@
 -------------------
 -- C o n f i g s --
 -------------------
-Config = {}
-Config.doktor = 2
 
-companyName = "Merkez Hastanesi"       
+
+companyName = "INEM Alternativ"       
 companyIcon = "CHAR_CALL911" -- https://wiki.gtanet.work/index.php?title=Notification_Pictures
-spawnRadius = 40              -- Default Value: 
-drivingStyle = 1074528293           -- Default Value: 786603
+spawnRadius = 50             -- Default Value: 
+drivingStyle = 786603           -- Default Value: 786603
 simplerRepair = false           -- When enabled, instead of getting out of the vehicle to repair, the mechanic stops his vehicle and the repair happens automatically.
 repairComsticDamage = false     -- When enabled, the vehicle's cosmetic damage gets reset.
 flipVehicle = false             -- When enabled, the vehicle will be flipped if on roof or side after repair.
@@ -22,9 +21,9 @@ mechPeds = {
                 --  * Find the vehicles here    https://wiki.gtanet.work/index.php?title=Vehicle_Models
                 --  * Find the colours here:    https://wiki.gtanet.work/index.php?title=Vehicle_Colors
 
-                [1] = {name = "Doktor Hulusi", icon = "CHAR_CALL911", model = "s_m_m_doctor_01", vehicle = 'faggio', colour = 111, 
+                [1] = {name = "Doutor Alberto", icon = "CHAR_CALL911", model = "s_m_m_doctor_01", vehicle = 'ems_gs1200', colour = 111, 
                                 ['lines'] = {
-                                        "Kendinize dikkat edin, geçmiş olsun.",}},
+                                        "Está tratado. Cuide-se.",}},
 
                 -- You can use this template to make your own driver.
 
